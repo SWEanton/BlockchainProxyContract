@@ -61,44 +61,6 @@ contract ProxyContract is UUPSUpgradeable, OwnableUpgradeable {
     }
 
     // Add other proxy-specific methods or overrides as necessary
-}
-
-    function _beforeFallback() internal {
-        require(msg.sender == address(this), "Fallback only allowed from proxy");
-        super._beforeFallback();
-    }
-
-    function _upgradeTo(address newImplementation) internal {
-        pendingImplementation = newImplementation;
-    }
-
-    function _finishUpgrade() internal {
-        pendingImplementation = address(0);
-        super._finishUpgrade();
-    }
-
-    function _getImplementation() internal view returns (address) {
-        return pendingImplementation;
-    }
-
-    function _setImplementation(address newImplementation) internal {
-        pendingImplementation = newImplementation;
-    }
-
-    function _getAdmin() internal view returns (address) {
-        return owner();
-    }
-
-    function _setAdmin(address newAdmin) internal {
-        transferOwnership(newAdmin);
-    }
-
-    function _willFallback() internal {
-        require(msg.sender == address(this), "Fallback only allowed from proxy");
-        super._willFallback();
-    }
-
-    // Add other proxy-specific methods or overrides as necessary
     function _authorizeUpgrade(address newImplementation) internal onlyOwner override {
         require(pendingImplementation == address(0) || newImplementation == pendingImplementation, "Cannot upgrade to the same implementation");
         super._authorizeUpgrade(newImplementation);
